@@ -10,13 +10,10 @@ def getIpsOnionoo():
     data = []
 
     for el in r_parsed:
-
-        aux = list(el['a'])
-        if (len(aux) > 1):
-
-            aux[1] = str(aux[1]).replace('[','').replace(']','')
-
-        data.append(aux)
+        data.append(el['a'][0])
+        
+        if (len(el['a']) > 1):
+            data.append(el['a'][1].replace('[','').replace(']',''))
 
 
     return tuple(data)

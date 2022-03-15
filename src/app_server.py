@@ -4,8 +4,12 @@ from database.ipDB import *
 import json
 
 
+
 def PopulateDB():
-    DropALL()
+
+    #drops all tables to make sure all ips came from the latest fetch
+    DropALL()   
+
     data = getIpsOnionoo()
     data2 = getIpsTorNodes()
 
@@ -13,25 +17,40 @@ def PopulateDB():
     return
 
 
-
 def FetchFullList():
-    return GetList('full')
+    data1 = getIpsOnionoo()
+    data2 = getIpsTorNodes()
+    return list(data1+data2)
+
+
+
+# def FetchFullList():
+#     return GetList('full')
+
 
 
 def BanIP(data):
+    SetDB()
     InsertIP_Banned(data)
     return
 
 
 
 def FetchValidList():
-    return GetList('valid')
+    view = FetchFullList()
+    for address in FetchBannedList():
+        print(address)
+        try:
+            view.remove(address)
+        except:
+            print(address + ": Ip not in list")
+    return view
 
 
 
 def FetchBannedList():
-    return GetBannedList()
+    return GetList('banned')
 
 
 
-PopulateDB()
+#PopulateDB()

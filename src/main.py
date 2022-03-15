@@ -3,7 +3,7 @@ from utils.external2 import *
 from database.ipDB import *
 import app_server
 
-from flask import Flask, jsonify, make_response, render_template, request
+from flask import Flask, jsonify, make_response,  request, render_template
 app = Flask(__name__)
 
 
@@ -14,10 +14,10 @@ def Home():
     
     mockList = ["index page"]
 
-    return make_response(jsonify(mockList))
+    return render_template('index.html')
 
 
-
+# GET endpoint - sends a list of all IPs collected from two distinct sources
 @app.get('/fullList')
 def fullList():
 
@@ -26,11 +26,11 @@ def fullList():
     return make_response(jsonify(resp))
     
 
-
+# POST endpoint - receives an object {'ip': '<ip_value>'} and store in a database
 @app.post('/ban_ip')
 def banIP():
 
-    data = request.get_json()
+    data = request.get_json() 
     print(data['ip'])
 
     app_server.BanIP(data['ip'])
@@ -51,7 +51,7 @@ def ValidList():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
 
 
 

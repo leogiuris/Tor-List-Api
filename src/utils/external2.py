@@ -20,7 +20,6 @@ def getIpsTorNodes():
         for line in lines:
             data.append([line.replace('\n','')])
         
-        
         return tuple(data)
         
 
