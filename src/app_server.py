@@ -1,44 +1,36 @@
-from utils.external1 import *
-from utils.external2 import *
-from database.ipDB import *
+from src.utils.external1 import *
+from src.utils.external2 import *
+from src.database.ipDB import *
 import json
 
-
-
-def PopulateDB():
-
-    #drops all tables to make sure all ips came from the latest fetch
-    DropALL()   
-
-    data = getIpsOnionoo()
-    data2 = getIpsTorNodes()
-
-    InsertIP_List(data+data2)
-    return
+###       BASIC INTERFACE BETWEEN THE MAIN SCRIPT AND THE DATABASE
 
 
 def FetchFullList():
     data1 = getIpsOnionoo()
     data2 = getIpsTorNodes()
-    return list(data1+data2)
+    fullList = data1+data2
 
+    db_InsertIP_FullList(fullList)
 
-
-# def FetchFullList():
-#     return GetList('full')
+    return list(set(list(fullList))) #ugly but effectively removes duplicates
 
 
 
 def BanIP(data):
-    SetDB()
-    InsertIP_Banned(data)
+    db_SetDB()
+    db_InsertIP_Banned(data)
     return
 
 
 
 def FetchValidList():
-    view = FetchFullList()
-    for address in FetchBannedList():
+    fetch = db_GetList('full')
+    if(len(fetch) < 1):
+        view = FetchFullList()
+    else:
+        view = fetch
+    for address in db_GetList('banned'):
         print(address)
         try:
             view.remove(address)
@@ -48,9 +40,3 @@ def FetchValidList():
 
 
 
-def FetchBannedList():
-    return GetList('banned')
-
-
-
-#PopulateDB()

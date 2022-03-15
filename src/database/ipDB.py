@@ -2,15 +2,15 @@
 import sqlite3 as sl
 import json
 
-def connect_to_db():
+def db_connect_to_db():
     conn = sl.connect('src/database/ips_tor.db', check_same_thread=False)
     return conn
 
 
 
-def createTables():
+def db_createBannedTable():
 
-    conn = connect_to_db() 
+    conn = db_connect_to_db() 
     
     with conn:
 
@@ -26,27 +26,99 @@ def createTables():
 
 
 
-def DropALL():
+def db_CreateFullListTable():
 
-    SetDB()
-    conn = connect_to_db() 
+    conn = db_connect_to_db() 
+
+    with conn:
+
+        conn.execute("""
+            CREATE TABLE ip (
+                ip_address TEXT PRIMARY KEY
+            )
+        """)
+
+    print("tabelas criadas")
+
+    conn.close()
+
+
+
+def db_InsertIP_FullList(ipList):
+
+    db_SetDB()
+
+    db_ClearFullListTable()
+        
+    conn = db_connect_to_db() 
+
+    with conn:
+        for el in ipList:
+            if(type(el) == list):
+                el = el[0]
+            conn.execute("INSERT OR REPLACE INTO ip (ip_address) VALUES(?);", (el,))
+
+    conn.close()
+
+    return
+
+
+
+def db_ClearFullListTable():
+    conn = db_connect_to_db() 
+
+    with conn:
+
+        conn.execute('DELETE FROM ip;')
+
+    print("tabelas criadas")
+
+    conn.close()
+    
+    pass
+
+
+
+def db_DropFullList():
+    db_SetDB()
+    conn = db_connect_to_db() 
+
+    with conn:
+
+        conn.execute("""
+            DROP TABLE ip;
+        """)
+
+    db_createBannedTable()
+    
+    conn.close()
+
+
+
+def db_DropALL():
+
+    db_SetDB()
+    conn = db_connect_to_db() 
 
     with conn:
 
         conn.execute("""
             DROP TABLE banned_ip;
         """)
+        conn.execute("""
+            DROP TABLE ip;
+        """)
 
-    createTables()
+    db_createBannedTable()
     
     conn.close()
 
 
 
-def InsertIP_Banned(value):
+def db_InsertIP_Banned(value):
     
-    SetDB()
-    conn = connect_to_db()
+    db_SetDB()
+    conn = db_connect_to_db()
     print("BANIU: ",value)
     with conn:
         conn.execute(insert_banned, (value,))
@@ -57,16 +129,15 @@ def InsertIP_Banned(value):
 
 
 
-def GetList(query_type):
-    SetDB() 
-    conn = connect_to_db() 
+def db_GetList(query_type):
+    db_SetDB() 
+    conn = db_connect_to_db() 
     c = conn.cursor()
 
-    sql = ''
-    
     if(query_type == 'banned'):
-        sql = query_banned
-    data = c.execute(sql)
+        data = c.execute(query_banned)
+    elif(query_type == 'full'):
+        data = c.execute(query_full)
 
     ret = []
 
@@ -79,14 +150,14 @@ def GetList(query_type):
 
 
 
-def verifDB():
+def db_verifDB():
 
-    conn = connect_to_db() 
+    conn = db_connect_to_db() 
     c = conn.cursor()   
 
     data = c.execute(sql_verif)
 
-    if data.fetchone()[0]==1 : 
+    if (data.fetchone()[0]==1): 
         conn.close()
         return True
     else: 
@@ -95,23 +166,20 @@ def verifDB():
 
 
 # Checks table integrity in every method
-def SetDB():
-    if not verifDB():
+def db_SetDB():
+    if not db_verifDB():
         print("Generating Database...")
-        createTables()
+        db_createBannedTable()
+        db_CreateFullListTable()
 
 
 
 
-query_banned = """
-        SELECT * FROM banned_ip
-    """
-
+query_banned = "SELECT * FROM banned_ip"
 insert_banned = 'INSERT OR REPLACE INTO banned_ip (ip_address) VALUES(?);'
-
 sql_verif = "SELECT count(name) FROM sqlite_master WHERE type='table' AND name='banned_ip';"
-
-
+sql_verif2 = "SELECT count(name) FROM sqlite_master WHERE type='table' AND name='ip';"
+query_full = "SELECT * FROM ip"
 
 
 

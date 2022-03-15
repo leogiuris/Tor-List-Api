@@ -1,5 +1,9 @@
+
+
 # start by pulling the python image
 FROM python:3.8-alpine
+
+RUN echo 'isso é chato p krl'
 
 # copy the requirements file into the image
 COPY ./requirements.txt /app/requirements.txt
