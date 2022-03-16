@@ -2,7 +2,6 @@
 
 
 import requests
-import json
 import time
 
 
@@ -15,15 +14,20 @@ def getIpsTorNodes():
         data = FetchSource()
 
     else:
-        print("\n:( Couldn' access dan.me.uk\nLatest stored list fetched instead....")
+        print("\n:( Couldn' access dan.me.uk\nLatest stored list fetched instead....\n")
         file = open('src/utils/dan.txt', 'r')
-        lines = file.readlines()
+        lines = file.read()
         file.close()
-        for line in lines:
-            if line.replace('\n','') in data:
-                data.append(line.replace('\n',''))
-    
-    
+        # for line in lines:
+        #     if line.replace('\n','') in data:
+        #         data.append(line.replace('\n',''))
+
+        data = lines.split('\n')
+        data.remove('')
+
+    for el in data:
+        if len(el) < 5:
+            print("<entrada invalida>: ", el)
 
     return tuple(data)
         
@@ -44,19 +48,19 @@ def checkTimer():
 def FetchSource():
     print("---\n\nACESSOU\n\n---")
     data = []
-    r = requests.get('https://www.dan.me.uk/torlist/?exit')
+    r = requests.get('https://www.dan.me.uk/torlist/')
     f = open('src/utils/timeLog.txt','w')
     f.write(str(time.time()))
     f.close()
 
-    print(r.text[0:50])
+    f = open(file = open('src/utils/dan.txt', 'w'))
+    f.write(str(r))
+    f.close()
 
     for el in r.text.split('\n'):
         if el not in data:
             data.append(el)
-    
-    print(len(data))
-    #print(*data[0:20], sep = '\n')
+
     return data
 
 

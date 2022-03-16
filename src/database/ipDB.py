@@ -116,7 +116,6 @@ def db_InsertIP_Banned(value):
     
     db_SetDB()
     conn = db_connect_to_db()
-    print("BANIU: ",value)
     with conn:
         conn.execute(insert_banned, (value,))
 
