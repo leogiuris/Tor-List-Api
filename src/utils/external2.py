@@ -23,11 +23,11 @@ def getIpsTorNodes():
         #         data.append(line.replace('\n',''))
 
         data = lines.split('\n')
-        data.remove('')
 
     for el in data:
         if len(el) < 5:
             print("<entrada invalida>: ", el)
+            data.remove(el)
 
     return tuple(data)
         
@@ -54,7 +54,7 @@ def FetchSource():
     f.close()
 
     file = open('src/utils/dan.txt', 'w')
-    file.write(str(r))
+    file.write(str(r.text))
     file.close()
 
     for el in r.text.split('\n'):
