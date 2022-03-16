@@ -15,15 +15,16 @@ def getIpsTorNodes():
         data = FetchSource()
 
     else:
-        print("Couldn' access dan.me.uk\nLatest stored list fetched instead....")
+        print("\n:( Couldn' access dan.me.uk\nLatest stored list fetched instead....")
         file = open('src/utils/dan.txt', 'r')
         lines = file.readlines()
-        
+        file.close()
         for line in lines:
             if line.replace('\n','') in data:
                 data.append(line.replace('\n',''))
-        
-    print(*data[0:10], sep = '\n')
+    
+    
+
     return tuple(data)
         
 
@@ -41,21 +42,21 @@ def checkTimer():
 
 
 def FetchSource():
-    print("ACESSOU")
+    print("---\n\nACESSOU\n\n---")
     data = []
     r = requests.get('https://www.dan.me.uk/torlist/?exit')
     f = open('src/utils/timeLog.txt','w')
     f.write(str(time.time()))
     f.close()
 
-    # danf = open('src/utils/dan.txt', 'w', buffering=1)
-    # print("tamanho (dan): ", len(r.text))
-    # danf.write(r.text)
-    # danf.close()
-    
-    for el in r.text:
+    print(r.text[0:50])
+
+    for el in r.text.split('\n'):
         if el not in data:
             data.append(el)
+    
+    print(len(data))
+    #print(*data[0:20], sep = '\n')
     return data
 
 

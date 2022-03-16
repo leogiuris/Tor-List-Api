@@ -38,7 +38,6 @@ def db_CreateFullListTable():
             )
         """)
 
-    print("tabelas criadas")
 
     conn.close()
 
@@ -70,8 +69,6 @@ def db_ClearFullListTable():
     with conn:
 
         conn.execute('DELETE FROM ip;')
-
-    print("tabelas criadas")
 
     conn.close()
     

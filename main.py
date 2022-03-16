@@ -20,7 +20,8 @@ def Home():
 def fullList():
 
     resp = FetchFullList()
-
+    while(resp.count('')>0):
+        resp.remove('')
     return make_response(jsonify(resp))
     
 
@@ -35,7 +36,7 @@ def banIP():
     return make_response(jsonify(resp))
 
 
-
+# GET endpoint - sends a new list excluding all registered banned IPs
 @app.get('/validList')
 def ValidList():
 
@@ -48,3 +49,7 @@ def ValidList():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
+
+
+
+    

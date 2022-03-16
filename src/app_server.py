@@ -11,9 +11,11 @@ def FetchFullList():
     data2 = getIpsTorNodes()
     fullList = data1+data2
 
-    db_InsertIP_FullList(fullList)
 
-    return list(set(list(fullList))) #ugly but effectively removes duplicates
+    #ugly, but effectively removes duplicates
+    db_InsertIP_FullList(list(set(list(fullList))))
+    
+    return list(db_GetList('full')) 
 
 
 
@@ -31,7 +33,6 @@ def FetchValidList():
     else:
         view = fetch
     for address in db_GetList('banned'):
-        print(address)
         try:
             view.remove(address)
         except:
