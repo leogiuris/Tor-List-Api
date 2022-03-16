@@ -53,9 +53,9 @@ def FetchSource():
     f.write(str(time.time()))
     f.close()
 
-    f = open(file = open('src/utils/dan.txt', 'w'))
-    f.write(str(r))
-    f.close()
+    file = open('src/utils/dan.txt', 'w')
+    file.write(str(r))
+    file.close()
 
     for el in r.text.split('\n'):
         if el not in data:
