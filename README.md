@@ -9,7 +9,7 @@ Base URL. Currently returns a placeholder static page.
 (Base) localhost:5000/
 ```
 
-# 1
+### 1
 This endpoint provides a complete list with all the IPs gathered fetching the sources.
 ```bash
 (GET) /fullList
@@ -17,14 +17,14 @@ This endpoint provides a complete list with all the IPs gathered fetching the so
 (can be loaded on browser)
 
 
-# 2
+### 2
 This endpoint receives a Json object in the format {'ip': '<ip_address>'} in a Post request. It allows the user to mark that IP address as 'banned', effectively blacklisting them.
 ```bash
 (POST) /ban_ip
 ```
 
 
-# 3
+### 3
 This endpoint returns the same list from endpoint 1 but excludes the IP addresses marked as 'banned'.
 ```bash
 (GET) /validList
