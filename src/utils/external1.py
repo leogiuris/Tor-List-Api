@@ -2,7 +2,7 @@
 import requests
 import json
 
-def getIpsOnionoo():
+def utils_getIpsOnionoo():
     
     r = requests.get('https://onionoo.torproject.org/summary?limit=5000')
 

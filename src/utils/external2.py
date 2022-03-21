@@ -7,12 +7,12 @@ import time
 
 
 
-def getIpsTorNodes():
+def utils_getIpsTorNodes():
 
     data = []
 
-    if(CheckTime()):
-        data = FetchSource()
+    if(utils_CheckTime()):
+        data = utils_FetchSource()
 
     else:
         print("\n:( Couldn' access dan.me.uk\nLatest stored list fetched instead....\n")
@@ -33,7 +33,7 @@ def getIpsTorNodes():
     return tuple(data)
         
 
-def FetchSource():
+def utils_FetchSource():
     print("---\n\nACESSOU\n\n---")
     data = []
     r = requests.get('https://www.dan.me.uk/torlist/')
@@ -52,7 +52,7 @@ def FetchSource():
     return data
 
 
-def CheckTime():
+def utils_CheckTime():
     with open('src/utils/timeLog.txt', 'r') as f:
         t = float(f.readline())
         f.close()

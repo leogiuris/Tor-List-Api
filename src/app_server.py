@@ -5,17 +5,11 @@ from src.database.ipDB import *
 
 
 
-
-
-# returns true if it's been 30 minutes since last outside API get
-
-
-
 def server_FetchFullList():
     
-    if CheckTime():
-        data1 = getIpsOnionoo()
-        data2 = getIpsTorNodes()
+    if utils_CheckTime():
+        data1 = utils_getIpsOnionoo()
+        data2 = utils_getIpsTorNodes()
         fullList = list(set(list(data1+data2)))
         db_InsertIP_FullList(fullList)
     else:
@@ -33,7 +27,6 @@ def server_BanIP(data):
 
 
 
-
 def server_FetchValidList():
     fetch = db_GetList('full')
     if(len(fetch) < 1):
@@ -46,6 +39,7 @@ def server_FetchValidList():
         except:
             print(address + ": Ip not in list")
     return view
+
 
 
 def server_getBlacklist():

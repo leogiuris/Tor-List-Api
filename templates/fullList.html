@@ -31,7 +31,7 @@
                         <button type="submit" style="color: red;"> Ban </button>
                     </form>
                 </td>
-                <td>{{bans[ips[i]]}}</td>
+                <td><i>{{bans[ips[i]]}}</i></td>
                 <td>{{ips[i]}}</td>
             </tr>
 
@@ -39,7 +39,8 @@
         </tbody>
 
     </table>
-    <a href="{{ url_for('FullList', all=True) }}">aaaaaaaaaa</a>
+    <a href="/fullList?all=True">Load Entire List</a>
+    <br><br>
 
 
 {% endblock %}

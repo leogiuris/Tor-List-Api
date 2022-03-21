@@ -1,3 +1,4 @@
+from email.policy import default
 from importlib import import_module
 from src.database.ipDB import *
 from src.app_server import *
@@ -27,24 +28,38 @@ def Index():
 
 # GET endpoint - sends a list of all IPs collected from two distinct sources
 @app.get('/fullList')
-def FullList(all='False'):
-    print(all)
+def FullList():
+    
+    # gets full list from server
     resp = server_FetchFullList()
+
+    # If the request is formated in JSON the API returns the full list in JSON
     if request.is_json:
+        print('--- JSON ---')
         resp = make_response(jsonify(resp))
+
+        # necessary to prevent cors error
+        # not recommended for production
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
+
+    # Else it assumes it's a web page request and returns the first 50 items unless 
+    # explicitly told to show all items (affects loading time)
     else:
-        if all == True:
+        if request.args.get("all"):
             size = len(resp)
         else:
-            size = int(request.args.get('size',default='100'))
+            size = 50
+
+        
+        # iterates the ip blacklist to mark all banned items in the full list
         bans = {}
         for ip in server_getBlacklist():
             try:
                 bans[ip] = "banned"
             except:
                 print(ip + ": Ip not in list")
+
         return render_template('fullList.html', total = len(resp), len = len(resp[0:size]), ips = resp, bans = bans)
 
     
@@ -55,10 +70,14 @@ def FullList(all='False'):
 @app.post('/ban_ip')
 def BanIP():
 
+
     if request.is_json:
         req = request.get_json()
         server_BanIP(req['ip_address'])
         resp = make_response(jsonify(''))
+
+        # necessary to prevent cors error
+        # not recommended for production
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
     else:
@@ -73,20 +92,27 @@ def BanIP():
 # GET endpoint - sends a new list excluding all registered banned IPs
 @app.get('/validList')
 def ValidList():
+
     resp = server_FetchValidList()
     if request.is_json:
         resp = make_response(jsonify(resp))
+
+        # necessary to prevent cors error
+        # not recommended for production
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
     else:
-        size = int(request.args.get('size',default='100'))
-        index = int(request.args.get('index',default='0'))
-        return render_template('validList.html', total = len(resp), len = len(resp[index:index+size]), ips = resp)
+        if request.args.get("all"):
+            size = len(resp)
+        else:
+            size = 50
+        
+        return render_template('validList.html', total = len(resp), len = len(resp[0:size]), ips = resp)
 
 
 
 
-
+# GET endpoint - Sends a list containing all banned IPs from the database
 @app.get('/bannedList')
 def BannedList():
     resp = server_getBlacklist()
@@ -95,8 +121,6 @@ def BannedList():
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
     else:
-        size = int(request.args.get('size',default='100'))
-        index = int(request.args.get('index',default='0'))
         return render_template('bannedList.html', len = len(resp), ips = resp)
 
 
