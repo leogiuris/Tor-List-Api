@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% set active_page = "ValidList" %}
+{% block content %}
+
+<h3>Valid IPs List</h3>
+<p>{{total}} items</p>
+
+<table class="table table-striped table-sm">
+    <!-- Table headers -->
+
+    <thead>
+        <tr style="color: green; ">
+            <th scope="col"></th>
+            <th scope="col">IP Adress</th>
+
+        </tr>
+    </thead>
+
+
+    <tbody>
+        <!-- For loop logic of jinja template -->
+        {%for i in range(0, len)%}
+
+        <!-- table rows -->
+        <tr>
+            <td></td>
+            <td>{{ips[i]}}</td>
+        </tr>
+
+        {%endfor%}
+    </tbody>
+
+</table>
+
+{% endblock %}

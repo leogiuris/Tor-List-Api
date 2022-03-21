@@ -1,21 +1,28 @@
 from src.utils.external1 import *
 from src.utils.external2 import *
 from src.database.ipDB import *
-import json
-
 ###       BASIC INTERFACE BETWEEN THE MAIN SCRIPT AND THE DATABASE
 
 
+
+
+
+# returns true if it's been 30 minutes since last outside API get
+
+
+
 def server_FetchFullList():
-    data1 = getIpsOnionoo()
-    data2 = getIpsTorNodes()
-    fullList = data1+data2
-
-
-    #ugly, but effectively removes duplicates
-    db_InsertIP_FullList(list(set(list(fullList))))
     
-    return list(db_GetList('full')) 
+    if CheckTime():
+        data1 = getIpsOnionoo()
+        data2 = getIpsTorNodes()
+        fullList = list(set(list(data1+data2)))
+        db_InsertIP_FullList(fullList)
+    else:
+        fullList = db_GetList('full')
+    
+
+    return fullList
 
 
 
@@ -23,6 +30,7 @@ def server_BanIP(data):
     db_SetDB()
     db_InsertIP_Banned(data)
     return
+
 
 
 

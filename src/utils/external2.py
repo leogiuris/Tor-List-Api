@@ -6,11 +6,12 @@ import time
 
 
 
+
 def getIpsTorNodes():
 
     data = []
 
-    if(checkTimer()):
+    if(CheckTime()):
         data = FetchSource()
 
     else:
@@ -32,19 +33,6 @@ def getIpsTorNodes():
     return tuple(data)
         
 
-
-def checkTimer():
-
-    with open('src/utils/timeLog.txt', 'r') as f:
-        t = float(f.readline())
-        f.close()
-        if( time.time() - t > 1800):
-            return True
-        else:
-            return False
-
-
-
 def FetchSource():
     print("---\n\nACESSOU\n\n---")
     data = []
@@ -64,3 +52,11 @@ def FetchSource():
     return data
 
 
+def CheckTime():
+    with open('src/utils/timeLog.txt', 'r') as f:
+        t = float(f.readline())
+        f.close()
+        if( time.time() - t > 1800):
+            return True
+        else:
+            return False
