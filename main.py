@@ -51,10 +51,9 @@ def FullList():
         else:
             size = 50
 
-        
         # iterates the ip blacklist to mark all banned items in the full list
         bans = {}
-        for ip in server_getBlacklist():
+        for ip in server_getBannedList():
             try:
                 bans[ip] = "banned"
             except:
@@ -115,7 +114,7 @@ def ValidList():
 # GET endpoint - Sends a list containing all banned IPs from the database
 @app.get('/bannedList')
 def BannedList():
-    resp = server_getBlacklist()
+    resp = server_getBannedList()
     if request.is_json:
         resp = make_response(jsonify(resp))
         resp.headers['Access-Control-Allow-Origin'] = '*'

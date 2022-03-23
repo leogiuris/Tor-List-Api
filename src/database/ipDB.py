@@ -55,7 +55,7 @@ def db_InsertIP_FullList(ipList):
         for el in ipList:
             if(type(el) == list):
                 el = el[0]
-            conn.execute("INSERT OR REPLACE INTO ip (ip_address) VALUES(?);", (el,))
+            conn.execute(sql_insert_full, (el,))
 
     conn.close()
 
@@ -170,7 +170,7 @@ def db_SetDB():
 
 
 
-
+sql_insert_full = "INSERT OR REPLACE INTO ip (ip_address) VALUES(?);"
 query_banned = "SELECT * FROM banned_ip"
 insert_banned = 'INSERT OR REPLACE INTO banned_ip (ip_address) VALUES(?);'
 sql_verif = "SELECT count(name) FROM sqlite_master WHERE type='table' AND name='banned_ip';"

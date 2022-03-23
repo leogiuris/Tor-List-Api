@@ -1,10 +1,5 @@
-
-
-
 import requests
 import time
-
-
 
 
 def utils_getIpsTorNodes():
@@ -19,19 +14,17 @@ def utils_getIpsTorNodes():
         file = open('src/utils/dan.txt', 'r')
         lines = file.read()
         file.close()
-        # for line in lines:
-        #     if line.replace('\n','') in data:
-        #         data.append(line.replace('\n',''))
 
         data = lines.split('\n')
 
     for el in data:
         if len(el) < 5:
-            print("<entrada invalida>: ", el)
+
             data.remove(el)
 
     return tuple(data)
         
+
 
 def utils_FetchSource():
     print("---\n\nACESSOU\n\n---")
@@ -50,6 +43,7 @@ def utils_FetchSource():
             data.append(el)
 
     return data
+
 
 
 def utils_CheckTime():
