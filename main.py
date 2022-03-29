@@ -14,14 +14,10 @@ app = Flask(__name__, template_folder='templates')
 
 
 
-
-
 # Base endpoint -  not much going on here
 @app.route('/')
 def Index():
     return render_template('index.html')
-
-
 
 
 
@@ -40,7 +36,7 @@ def FullList():
 
         # necessary to prevent cors error
         # not recommended for production
-        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers.add('Access-Control-Allow-Origin','*')
         return resp
 
     # Else it assumes it's a web page request and returns the first 50 items unless 
@@ -121,6 +117,8 @@ def BannedList():
         return resp
     else:
         return render_template('bannedList.html', len = len(resp), ips = resp)
+
+
 
 
 if __name__ == '__main__':

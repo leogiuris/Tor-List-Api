@@ -2,12 +2,15 @@
 import sqlite3 as sl
 import json
 
+
+# Method called to setup connection before any sql command
 def db_connect_to_db():
-    conn = sl.connect('src/database/ips_tor.db', check_same_thread=False)
+    conn = sl.connect('src/database/ips_tor.db')
     return conn
 
 
-
+# Creates 'banned_ip' Table
+#   - consists of a single column containing the IP address as primary key
 def db_createBannedTable():
 
     conn = db_connect_to_db() 
@@ -25,7 +28,8 @@ def db_createBannedTable():
     conn.close()
 
 
-
+# Creates 'ip' Table (full list gathered from external sources)
+#   - consists of a single column containing the IP address as the primary key
 def db_CreateFullListTable():
 
     conn = db_connect_to_db() 
@@ -42,19 +46,20 @@ def db_CreateFullListTable():
     conn.close()
 
 
-
+# Inserts the full list of gathered IPs into the 'ip' table
+# The SQL command eliminates the duplicates between the two sources
 def db_InsertIP_FullList(ipList):
 
     db_SetDB()
 
+    # Necessary so that old addresses (not present in the current set) don't persist in the database
     db_ClearFullListTable()
         
     conn = db_connect_to_db() 
 
     with conn:
         for el in ipList:
-            if(type(el) == list):
-                el = el[0]
+
             conn.execute(sql_insert_full, (el,))
 
     conn.close()
@@ -62,7 +67,7 @@ def db_InsertIP_FullList(ipList):
     return
 
 
-
+# Clears 'ip' table before inserting updated values
 def db_ClearFullListTable():
     conn = db_connect_to_db() 
 
@@ -125,6 +130,8 @@ def db_InsertIP_Banned(value):
 
 
 
+# Method called to query any table
+# Returns a list of strings
 def db_GetList(query_type):
     db_SetDB() 
     conn = db_connect_to_db() 
@@ -145,7 +152,8 @@ def db_GetList(query_type):
     return ret
 
 
-
+# Verifies if tables exist
+# Returns True if tables exist
 def db_verifDB():
 
     conn = db_connect_to_db() 

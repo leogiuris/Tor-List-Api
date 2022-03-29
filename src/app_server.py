@@ -18,6 +18,7 @@ def server_FetchFullList():
         print(len(data1), " entries from https://onionoo.torproject.org/summary?limit=5000")  
         print(len(data2), " entries from https://www.dan.me.uk/torlist/") 
 
+
         # a way to remove duplicates and return the original list without having to query the database and get the same list
         fullList = list(set(list(data1+data2))) 
         db_InsertIP_FullList(fullList)
