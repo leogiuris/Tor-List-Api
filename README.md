@@ -36,8 +36,23 @@ docker run -d -p 5000:5000 flask_docker_test
 ```
 
 
-You can test the app by running simple scripts such as test.py and test.js (using Node.js) that sends Get and Post requests to the server. 
+Once the server is running, via Docker or locally, you have two ways to interact
+with the API: through the server's provided view (type 'http://localhost:5000' on your browser) or you can access through your own frontend app.
 
-You may want to take them out of the app directory and run them from some place else, like the Desktop path.
+### Through the server's provided View
+You can interact on your browser by typing 'http://localhost:5000' on the address bar. This is because the API returns an HTML view when the request is not Application/JSON content-type.
 
+### Through JSON requests
+To request JSON data for your own project, you can send http 'get' and 'post' requests. To do so you must add the following headers:
 
+```bash
+{'Content-Type': 'application/json'}
+```
+```bash
+{'Access-Control-Allow-Origin': '*'}
+```
+
+To send a 'post' request, the body must follow the format 
+{'ip_address': <'address string'>}
+
+i.e: {'ip_address': '0.0.0.0'}
