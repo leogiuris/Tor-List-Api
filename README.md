@@ -53,6 +53,7 @@ To request JSON data for your own project, you can send http 'get' and 'post' re
 ```
 
 To send a 'post' request, the body must follow the format 
+
 {'ip_address': <'address string'>}
 
-i.e: {'ip_address': '0.0.0.0'}
+i.e: {'ip_address' : '0.0.0.0'}
