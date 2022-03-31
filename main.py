@@ -4,15 +4,15 @@ from src.database.ipDB import *
 from src.app_server import *
 
 from flask import Flask, jsonify, url_for, make_response, redirect, request, render_template
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__, template_folder='templates')
 
 
+CORS(app, supports_credentials=True, methods=['GET','POST'])
 # Base Flask main app script
 
 # Each method deals with an endpoint and sends back a JSON response or a web page
-
-
 
 # Base endpoint -  not much going on here
 @app.route('/')
@@ -21,22 +21,19 @@ def Index():
 
 
 
-
 # GET endpoint - sends a list of all IPs collected from two distinct sources
 @app.get('/fullList')
+@cross_origin(supports_credentials=True)
 def FullList():
     
     # gets full list from server
     resp = server_FetchFullList()
 
     # If the request is formated in JSON the API returns the full list in JSON
-    if request.is_json:
+    if request.content_type == 'application/json':
         print('--- JSON ---')
         resp = make_response(jsonify(resp))
 
-        # necessary to prevent cors error
-        # not recommended for production
-        resp.headers.add('Access-Control-Allow-Origin','*')
         return resp
 
     # Else it assumes it's a web page request and returns the first 50 items unless 
@@ -62,6 +59,7 @@ def FullList():
 
 
 # POST endpoint - receives an object {'ip_address': '<ip_value>'} and store in a database
+@cross_origin(supports_credentials=True)
 @app.post('/ban_ip')
 def BanIP():
 
@@ -75,6 +73,7 @@ def BanIP():
         # not recommended for production
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
+		
     else:
         req = request.form.get('ip_address')
         server_BanIP(req)
@@ -83,8 +82,8 @@ def BanIP():
 
 
 
-
 # GET endpoint - sends a new list excluding all registered banned IPs
+@cross_origin(supports_credentials=True)
 @app.get('/validList')
 def ValidList():
 
@@ -94,7 +93,7 @@ def ValidList():
 
         # necessary to prevent cors error
         # not recommended for production
-        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:4200'
         return resp
     else:
         if request.args.get("all"):
@@ -108,6 +107,7 @@ def ValidList():
 
 
 # GET endpoint - Sends a list containing all banned IPs from the database
+@cross_origin(supports_credentials=True)
 @app.get('/bannedList')
 def BannedList():
     resp = server_getBannedList()
